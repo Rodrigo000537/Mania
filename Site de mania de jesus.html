@@ -1,0 +1,2727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fé Artesanal - Terços Personalizados</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-ivory: #F5F1E8;
+            --color-sand: #E8DCC4;
+            --color-charcoal: #2B2B2B;
+            --color-gold: #C9A961;
+            --color-deep-brown: #4A3933;
+            --color-white: #FFFFFF;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Archivo', sans-serif;
+            
+            --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.3s ease;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-ivory);
+            color: var(--color-charcoal);
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--color-white);
+            padding: 1.5rem 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            transition: var(--transition-smooth);
+        }
+
+        header.scrolled {
+            padding: 1rem 4%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        nav {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--color-charcoal);
+            font-weight: 400;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            transition: var(--transition-fast);
+            position: relative;
+            cursor: pointer;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-gold);
+            transition: var(--transition-fast);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--color-gold);
+            color: var(--color-white);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--color-gold);
+            color: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* AUTH MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-white);
+            padding: 3rem;
+            border-radius: 8px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            animation: modalSlideIn 0.4s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-charcoal);
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            color: var(--color-gold);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-charcoal);
+        }
+
+        .modal-subtitle {
+            color: var(--color-deep-brown);
+            margin-bottom: 2rem;
+        }
+
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 2px solid var(--color-sand);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-gold);
+        }
+
+        select.form-input {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A3933' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        textarea.form-input {
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--color-charcoal);
+            color: var(--color-white);
+            width: 100%;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--color-gold);
+            transition: var(--transition-smooth);
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-charcoal);
+            border: 2px solid var(--color-charcoal);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-charcoal);
+            color: var(--color-white);
+        }
+
+        /* CART SIDEBAR */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background: var(--color-white);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: var(--transition-smooth);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--color-sand);
+        }
+
+        .cart-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--color-charcoal);
+        }
+
+        .cart-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-charcoal);
+        }
+
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--color-ivory);
+            border-radius: 8px;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-ivory) 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-specs {
+            font-size: 0.85rem;
+            color: var(--color-deep-brown);
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: var(--color-gold);
+            font-weight: 600;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: var(--color-deep-brown);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .cart-total {
+            padding: 1.5rem;
+            background: var(--color-ivory);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-total-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-total-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            text-align: right;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--color-deep-brown);
+        }
+
+        .cart-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--color-ivory) 0%, var(--color-sand) 100%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(74, 57, 51, 0.05) 0%, transparent 50%);
+            animation: subtleMove 20s ease-in-out infinite;
+        }
+
+        @keyframes subtleMove {
+            0%, 100% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.05) translate(2%, 2%); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            animation: fadeInUp 1.2s ease-out 0.2s backwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 6rem;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            color: var(--color-charcoal);
+            animation: fadeInUp 1.2s ease-out 0.4s backwards;
+        }
+
+        .hero-title strong {
+            font-weight: 700;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--color-deep-brown);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            animation: fadeInUp 1.2s ease-out 0.6s backwards;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 1.2s ease-out 0.8s backwards;
+        }
+
+        /* FEATURES */
+        .features {
+            padding: 6rem 4%;
+            background: var(--color-white);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+        }
+
+        .feature {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .feature:nth-child(1) { animation-delay: 0.1s; }
+        .feature:nth-child(2) { animation-delay: 0.2s; }
+        .feature:nth-child(3) { animation-delay: 0.3s; }
+        .feature:nth-child(4) { animation-delay: 0.4s; }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-charcoal);
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-deep-brown);
+            font-weight: 300;
+        }
+
+        /* COLLECTION PREVIEW */
+        .collection-preview {
+            padding: 8rem 4%;
+            background: var(--color-ivory);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--color-charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-deep-brown);
+            font-weight: 300;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--color-white);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .product-card:active {
+            transform: translateY(-8px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-ivory) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-name {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            font-size: 1rem;
+            color: var(--color-deep-brown);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-gold);
+        }
+
+        /* CUSTOMIZATION SECTION */
+        .customization {
+            padding: 8rem 4% 4rem;
+            background: var(--color-white);
+            min-height: 100vh;
+        }
+
+        .customization-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .customization-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--color-charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .customization-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-deep-brown);
+            font-weight: 300;
+        }
+
+        .customization-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* PREVIEW */
+        .preview-section {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .preview-card {
+            background: var(--color-ivory);
+            padding: 4rem;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .rosary-preview {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .rosary-visual {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-ivory) 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rosary-circle {
+            width: 280px;
+            height: 280px;
+            border: 4px solid var(--rosary-main-color, #4A3933);
+            border-radius: 50%;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .rosary-cross {
+            width: 60px;
+            height: 80px;
+            background: var(--rosary-cross-color, #4A3933);
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            clip-path: polygon(40% 0, 60% 0, 60% 40%, 100% 40%, 100% 60%, 60% 60%, 60% 100%, 40% 100%, 40% 60%, 0 60%, 0 40%, 40% 40%);
+            transition: var(--transition-smooth);
+        }
+
+        .rosary-beads {
+            position: absolute;
+            inset: -8px;
+        }
+
+        .bead {
+            width: 16px;
+            height: 16px;
+            background: var(--rosary-main-color, #4A3933);
+            border-radius: 50%;
+            position: absolute;
+            transition: var(--transition-smooth);
+        }
+
+        .bead-large {
+            width: 20px;
+            height: 20px;
+            background: var(--rosary-pater-color, #C9A961);
+        }
+
+        .bead:nth-child(1) { top: 0; left: 50%; transform: translate(-50%, -50%); }
+        .bead:nth-child(2) { top: 10%; left: 85%; }
+        .bead:nth-child(3) { top: 30%; left: 95%; }
+        .bead:nth-child(4) { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+        .bead:nth-child(5) { top: 70%; left: 95%; }
+        .bead:nth-child(6) { top: 90%; left: 85%; }
+        .bead:nth-child(7) { top: 100%; left: 50%; transform: translate(-50%, -50%); }
+        .bead:nth-child(8) { top: 90%; left: 15%; }
+
+        .price-display {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 2rem;
+        }
+
+        .price-breakdown {
+            font-size: 0.9rem;
+            color: var(--color-deep-brown);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .preview-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-gold);
+            margin-bottom: 2rem;
+            min-height: 2rem;
+        }
+
+        /* CUSTOMIZATION OPTIONS */
+        .options-section {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .option-group {
+            background: var(--color-ivory);
+            padding: 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .option-group:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .option-label {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .option-description {
+            font-size: 0.95rem;
+            color: var(--color-deep-brown);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .color-grid, .material-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+        }
+
+        .color-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .color-option.selected {
+            border-color: var(--color-charcoal);
+            box-shadow: 0 0 0 4px var(--color-ivory);
+        }
+
+        .color-option::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--color-deep-brown);
+            white-space: nowrap;
+        }
+
+        .material-option {
+            padding: 1.5rem;
+            border: 2px solid var(--color-sand);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-align: center;
+        }
+
+        .material-option:hover {
+            border-color: var(--color-gold);
+            background: var(--color-sand);
+        }
+
+        .material-option.selected {
+            border-color: var(--color-charcoal);
+            background: var(--color-sand);
+        }
+
+        .material-name {
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .material-price {
+            font-size: 0.9rem;
+            color: var(--color-gold);
+            font-weight: 500;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--color-sand);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            transition: var(--transition-fast);
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--color-gold);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--color-deep-brown);
+            margin-top: 0.5rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            background: var(--color-charcoal);
+            color: var(--color-white);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: var(--transition-smooth);
+            margin-top: 2rem;
+            border-radius: 4px;
+        }
+
+        .add-to-cart:hover {
+            background: var(--color-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* PRODUCT CATEGORY PAGE */
+        .category-page {
+            display: none;
+            padding: 8rem 4%;
+            background: var(--color-white);
+            min-height: 100vh;
+        }
+
+        .category-page.active {
+            display: block;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .category-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--color-charcoal);
+            margin-bottom: 1rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-deep-brown);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: var(--transition-fast);
+        }
+
+        .back-btn:hover {
+            color: var(--color-gold);
+        }
+
+        .category-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .category-product-card {
+            background: var(--color-ivory);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .category-product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .category-product-image {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--color-sand) 0%, var(--color-ivory) 100%);
+        }
+
+        .category-product-info {
+            padding: 1.5rem;
+        }
+
+        .category-product-name {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 0.75rem;
+        }
+
+        .category-product-desc {
+            font-size: 0.9rem;
+            color: var(--color-deep-brown);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .category-product-price {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--color-charcoal);
+            color: var(--color-white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+
+        .add-btn:hover {
+            background: var(--color-gold);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .customization-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .preview-section {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .category-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    <!-- ADICIONE ESTE CSS NO <style> DO SEU CÓDIGO -->
+<style>
+    /* Estilos para opções visuais */
+    .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+    }
+
+    .material-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+    }
+
+    .option-item {
+        position: relative;
+        cursor: pointer;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 3px solid transparent;
+        background: #f7fafc;
+    }
+
+    .option-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .option-item.selected {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+    }
+
+    .option-image {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .material-grid .option-image {
+        height: 140px;
+    }
+
+    .option-info {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .option-name {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 4px;
+        font-size: 0.95em;
+    }
+
+    .option-price {
+        color: #667eea;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .option-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #667eea;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75em;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    /* ============================================
+   CSS PROFISSIONAL PARA CUSTOMIZAÇÃO DE TERÇO
+   Adicione este CSS ao seu <style> existente
+   ============================================ */
+
+/* Estilos para opções visuais */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+}
+
+.material-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.option-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.option-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.option-item.selected {
+    border-color: #667eea;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+    background: linear-gradient(to bottom, #ffffff, #f8f9ff);
+}
+
+.option-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.option-item:hover .option-image {
+    transform: scale(1.05);
+}
+
+.material-grid .option-image {
+    height: 160px;
+}
+
+.option-info {
+    padding: 16px;
+    text-align: center;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+}
+
+.option-name {
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 6px;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.option-price {
+    color: #667eea;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.option-item.selected .option-price {
+    color: #5568d3;
+}
+
+.option-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.option-check {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #10b981;
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    animation: checkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.option-item.selected .option-check {
+    display: flex;
+}
+
+@keyframes checkPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Labels e descrições profissionais */
+.option-label {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.option-description {
+    color: #64748b;
+    margin-bottom: 24px;
+    line-height: 1.6;
+    font-size: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.option-group {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.option-group:last-child {
+    border-bottom: none;
+}
+
+/* Preview profissional */
+.preview-name {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #667eea;
+    min-height: 40px;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.price-display {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.price-breakdown {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Input profissional */
+.text-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 500;
+    color: #1a202c;
+}
+
+.text-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    background: #f8f9ff;
+}
+
+.char-count {
+    text-align: right;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin-top: 10px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Botão adicionar ao carrinho profissional */
+.add-to-cart {
+    width: 100%;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+    letter-spacing: 0.3px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.add-to-cart:active {
+    transform: translateY(0);
+}
+
+/* Headers da seção de customização */
+.customization-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.customization-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Melhorias no preview card */
+.preview-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Melhorias no options section */
+.options-section {
+    background: white;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+    .color-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+    }
+
+    .material-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+    }
+
+    .option-label {
+        font-size: 1.3rem;
+    }
+
+    .customization-title {
+        font-size: 2.2rem;
+    }
+
+    .price-display {
+        font-size: 2.5rem;
+    }
+
+    .option-image {
+        height: 100px;
+    }
+
+    .material-grid .option-image {
+        height: 140px;
+    }
+
+    .option-info {
+        padding: 12px;
+    }
+
+    .option-name {
+        font-size: 0.9rem;
+    }
+
+    .option-price {
+        font-size: 0.85rem;
+    }
+}
+
+/* Animação suave ao carregar */
+.option-item {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.option-item:nth-child(1) { animation-delay: 0.05s; }
+.option-item:nth-child(2) { animation-delay: 0.1s; }
+.option-item:nth-child(3) { animation-delay: 0.15s; }
+.option-item:nth-child(4) { animation-delay: 0.2s; }
+.option-item:nth-child(5) { animation-delay: 0.25s; }
+.option-item:nth-child(6) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ============================================
+   ESCONDER O PREVIEW VISUAL DO TERÇO
+   Adicione este CSS ao seu código existente
+   ============================================ */
+
+/* Esconder toda a seção de preview visual do terço */
+.rosary-preview {
+    display: none !important;
+}
+
+/* OU se quiser esconder apenas o visual mas manter o card */
+.rosary-visual {
+    display: none !important;
+}
+
+/* Ajustar o preview card sem a imagem */
+.preview-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+/* Dar mais espaço ao nome personalizado */
+.preview-name {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #667eea;
+    min-height: 50px;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Preço ainda mais destacado */
+.price-display {
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin-bottom: 30px;
+    letter-spacing: -0.03em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+/* ============================================
+   REMOVER COMPLETAMENTE BADGES PREMIUM
+   Adicione este CSS DEPOIS de todos os outros
+   ============================================ */
+
+/* FORÇA A REMOÇÃO DE BADGES PREMIUM */
+.option-badge,
+span.option-badge,
+div.option-badge,
+[class*="badge"],
+[class*="premium"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* Garante que nenhum elemento com texto "Premium" apareça */
+.option-item span:contains("Premium"),
+.option-item div:contains("Premium") {
+    display: none !important;
+}
+
+/* Remove qualquer badge posicionado no canto */
+.option-item > span[style*="position: absolute"],
+.option-item > div[style*="position: absolute"] {
+    display: none !important;
+}
+
+/* Garantir que apenas o check apareça no canto */
+.option-item > * {
+    position: relative;
+}
+
+.option-check {
+    position: absolute !important;
+    top: 12px;
+    left: 12px;
+    display: none;
+}
+
+.option-item.selected .option-check {
+    display: flex !important;
+}
+</style>
+</head>
+<body>
+    <!-- AUTH MODAL -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAuthModal()">✕</button>
+            <h2 class="modal-title">Bem-vindo</h2>
+            <p class="modal-subtitle">Entre para continuar sua jornada de fé</p>
+            
+            <form class="email-form" onsubmit="loginWithNameAndBirthdate(event)">
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    placeholder="Seu nome completo" 
+                    required
+                    id="nameInput"
+                >
+                <input 
+                    type="date" 
+                    class="form-input" 
+                    placeholder="Data de nascimento" 
+                    required
+                    id="birthdateInput"
+                >
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2 class="cart-title">Carrinho</h2>
+            <button class="cart-close" onclick="toggleCart()">✕</button>
+        </div>
+        
+        <div id="cartContent">
+            <div class="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Seu carrinho está vazio</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close" onclick="closeCheckoutModal()">✕</button>
+            <h2 class="modal-title">Finalizar Pedido</h2>
+            <p class="modal-subtitle">Preencha seus dados para concluir a compra</p>
+            
+            <form class="email-form" onsubmit="submitCheckout(event)" style="gap: 1.5rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Nome Completo</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        placeholder="Seu nome completo" 
+                        required
+                        id="checkoutName"
+                    >
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">E-mail</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        placeholder="seu@email.com" 
+                        required
+                        id="checkoutEmail"
+                    >
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Telefone/WhatsApp</label>
+                    <input 
+                        type="tel" 
+                        class="form-input" 
+                        placeholder="(00) 00000-0000" 
+                        required
+                        id="checkoutPhone"
+                    >
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">CEP</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        placeholder="00000-000" 
+                        required
+                        id="checkoutCep"
+                        maxlength="9"
+                    >
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Endereço</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        placeholder="Rua, número, complemento" 
+                        required
+                        id="checkoutAddress"
+                    >
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Cidade</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            placeholder="Sua cidade" 
+                            required
+                            id="checkoutCity"
+                        >
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Estado</label>
+                        <select class="form-input" required id="checkoutState">
+                            <option value="">Selecione</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--color-charcoal);">Observações (opcional)</label>
+                    <textarea 
+                        class="form-input" 
+                        placeholder="Alguma observação sobre o pedido?" 
+                        rows="3"
+                        id="checkoutNotes"
+                        style="resize: vertical; font-family: var(--font-body);"
+                    ></textarea>
+                </div>
+
+                <div style="background: var(--color-ivory); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 1.1rem; font-weight: 500;">Total do Pedido:</span>
+                        <span style="font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--color-gold);" id="checkoutTotal">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 0;">Confirmar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="logo" onclick="goHome()">Fé Artesanal</div>
+        <nav>
+            <a onclick="goHome()">Início</a>
+            <a href="#collection">Coleção</a>
+            <div class="user-menu">
+                <div class="cart-icon" onclick="toggleCart()">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="user-avatar hidden" id="userAvatar" onclick="logout()"></div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div id="mainContent">
+        <!-- HERO SECTION -->
+        <section class="hero" id="home">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <div class="hero-subtitle">Feito à mão. Feito com fé.</div>
+                <h1 class="hero-title">
+                    Um terço.
+                    <strong>Sua fé. Do seu jeito.</strong>
+                </h1>
+                <p class="hero-description">
+                    Cada terço é uma obra única, criada artesanalmente com pedras selecionadas e atenção espiritual. 
+                    Personalize cada detalhe e carregue sua fé com você.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#collection" class="btn btn-secondary">Ver coleção</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="features">
+            <div class="feature">
+                <span class="feature-icon">✝️</span>
+                <h3 class="feature-title">100% Personalizado</h3>
+                <p class="feature-description">Escolha cada detalhe do seu terço: pedras, cruz, medalha e até nome gravado.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🚚</span>
+                <h3 class="feature-title">Frete Grátis</h3>
+                <p class="feature-description">Entregamos em todo o Brasil sem custo adicional, em até 14 dias.</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🧵</span>
+                <h3 class="feature-title">Produção Manual</h3>
+                <p class="feature-description">Cada peça montada com dedicação e oração</p>
+            </div>
+        </section>
+
+        <!-- COLLECTION -->
+<section class="collection-preview" id="collection">
+    <div class="section-header">
+        <h2 class="section-title">Nossa Coleção</h2>
+        <p class="section-subtitle">
+            Descubra nossos produtos de fé feitos com amor
+        </p>
+    </div>
+
+    <div class="products-grid">
+        <!-- BÍBLIAS -->
+        <div class="product-card" data-category="biblias">
+            <div class="product-image">
+                <img 
+                    src="https://i.postimg.cc/63p8dh56/sg-11134201-7rd4h-m7cj34oem8rn2a.webp"
+                    alt="Bíblia Pastoral"
+                >
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Bíblias Sagradas</h3>
+                <p class="product-description">
+                    Edições cuidadosamente selecionadas para sua jornada espiritual
+                </p>
+                <div class="product-price">A partir de R$ 89,00</div>
+            </div>
+        </div>
+
+        <!-- VELAS -->
+        <div class="product-card" data-category="velas">
+            <div class="product-image">
+                <img 
+                    src="https://i.postimg.cc/PxgSLNTY/Whats-App-Image2024-03-25at12-53-45-800x.webp"
+                    alt="Vela artesanal personalizada"
+                >
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Velas Artesanais</h3>
+                <p class="product-description">
+                    Velas feitas à mão para momentos de oração e reflexão
+                </p>
+                <div class="product-price">A partir de R$ 35,00</div>
+            </div>
+        </div>
+
+        <!-- XÍCARAS -->
+        <div class="product-card" data-category="xicaras">
+            <div class="product-image">
+                <img 
+                    src="https://i.postimg.cc/SRG1wkbf/Screenshot-from-2026-01-28-17-07-50.png"
+                    alt="Xícara Fé"
+                >
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Xícaras de Fé</h3>
+                <p class="product-description">
+                    Xícaras com mensagens inspiradoras para seus momentos especiais
+                </p>
+                <div class="product-price">A partir de R$ 39,00</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- CUSTOMIZATION SECTION -->
+        <section class="customization" id="customize">
+            <div class="customization-header">
+                <h2 class="customization-title">Crie seu Terço</h2>
+                <p class="customization-subtitle">Personalize cada detalhe da sua jornada de fé</p>
+            </div>
+
+            <div class="customization-container">
+                <!-- PREVIEW -->
+                <div class="preview-section">
+                    <div class="preview-card">
+                        <div class="rosary-preview">
+                            <div class="rosary-visual">
+                                <div class="rosary-circle">
+                                    <div class="rosary-beads">
+                                        <div class="bead bead-large"></div>
+                                        <div class="bead"></div>
+                                        <div class="bead"></div>
+                                        <div class="bead"></div>
+                                        <div class="bead bead-large"></div>
+                                        <div class="bead"></div>
+                                        <div class="bead"></div>
+                                        <div class="bead"></div>
+                                    </div>
+                                    <div class="rosary-cross"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-name" id="previewName"></div>
+                        <div class="price-display" id="priceDisplay">R$ 129,00</div>
+                        <div class="price-breakdown" id="priceBreakdown">
+                            Base: R$ 129,00
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart()">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- OPTIONS -->
+                <div class="options-section">
+                    <div class="option-group">
+                        <label class="option-label">Pedras das Ave-Marias</label>
+                        <p class="option-description">Escolha a cor das contas principais do seu terço</p>
+                        <div class="color-grid" id="aveMariaColors"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="option-label">Pedras dos Pai-Nossos</label>
+                        <p class="option-description">Pedras de destaque que marcam cada mistério</p>
+                        <div class="color-grid" id="paterNosterColors"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="option-label">Cruz</label>
+                        <p class="option-description">Escolha o material e estilo da cruz</p>
+                        <div class="material-grid" id="crossOptions"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="option-label">Medalha</label>
+                        <p class="option-description">Adicione uma medalha de proteção</p>
+                        <div class="material-grid" id="medalOptions"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="option-label">Corda</label>
+                        <p class="option-description">Cor da corda que une as contas</p>
+                        <div class="color-grid" id="cordColors"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="option-label">Nome Personalizado</label>
+                        <p class="option-description">Gravação artesanal de um nome ou palavra especial (opcional)</p>
+                        <input 
+                            type="text" 
+                            class="text-input" 
+                            id="customName" 
+                            placeholder="Digite o nome ou deixe em branco"
+                            maxlength="20"
+                            oninput="updateName()"
+                        >
+                        <div class="char-count"><span id="charCount">0</span>/20 caracteres</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CATEGORY PAGES -->
+    <div class="category-page" id="bibliasPage">
+        <a href="#" class="back-btn" onclick="hideCategory(event)">← Voltar para coleção</a>
+        <div class="category-header">
+            <h2 class="category-title">Bíblias Sagradas</h2>
+            <p class="section-subtitle">Edições especiais para sua jornada espiritual</p>
+        </div>
+        <div class="category-products" id="bibliasProducts"></div>
+    </div>
+
+    <div class="category-page" id="velasPage">
+        <a href="#" class="back-btn" onclick="hideCategory(event)">← Voltar para coleção</a>
+        <div class="category-header">
+            <h2 class="category-title">Velas Artesanais</h2>
+            <p class="section-subtitle">Iluminação para seus momentos de oração</p>
+        </div>
+        <div class="category-products" id="velasProducts"></div>
+    </div>
+
+    <div class="category-page" id="xicarasPage">
+        <a href="#" class="back-btn" onclick="hideCategory(event)">← Voltar para coleção</a>
+        <div class="category-header">
+            <h2 class="category-title">Xícaras de Fé</h2>
+            <p class="section-subtitle">Mensagens inspiradoras para cada dia</p>
+        </div>
+        <div class="category-products" id="xicarasProducts"></div>
+    </div>
+
+    <div class="category-page" id="tercosPage">
+        <a href="#" class="back-btn" onclick="hideCategory(event)">← Voltar para coleção</a>
+        <div class="category-header">
+            <h2 class="category-title">Terços Personalizados</h2>
+            <p class="section-subtitle">Ou escolha um terço pronto da nossa coleção</p>
+        </div>
+        <div class="category-products" id="tercosProducts"></div>
+    </div>
+
+  <script>
+        // ========================================
+        // EMAILJS - INICIALIZAÇÃO IMEDIATA
+        // ========================================
+        (function() {
+            emailjs.init("8L4KormB6xLBIc3WX");
+            console.log('✅ EmailJS inicializado');
+        })();
+
+        // ========================================
+        // CONFIGURAÇÕES DE EMAIL
+        // ========================================
+        const EMAIL_CONFIG = {
+            SERVICE_ID: 'service_ppv726a',
+            TEMPLATE_ID: 'template_tpngdkn'
+        };
+
+        // ========================================
+        // PRODUCT DATA
+        // ========================================
+        const products = {
+            biblias: [
+                { name: 'Bíblia Sagrada Ave Maria', price: 89, image: '📖', desc: 'Edição tradicional com capa luxo' },
+                { name: 'Bíblia de Estudo NVI', price: 149, image: '📕', desc: 'Com notas e comentários explicativos' },
+                { name: 'Bíblia Jerusalém', price: 179, image: '📗', desc: 'Tradução renomada, capa couro' },
+                { name: 'Bíblia King James', price: 129, image: '📘', desc: 'Versão clássica em português' },
+                { name: 'Bíblia Jovem', price: 79, image: '📙', desc: 'Linguagem atual para jovens' },
+                { name: 'Bíblia Infantil Ilustrada', price: 69, image: '📚', desc: 'Histórias bíblicas para crianças' }
+            ],
+            velas: [
+                { name: 'Vela Votiva Branca', price: 35, image: '🕯️', desc: 'Duração 7 dias, aromatizada' },
+                { name: 'Vela Perfumada Lavanda', price: 45, image: '🕯️', desc: 'Aroma relaxante, 100% natural' },
+                { name: 'Vela de Oração', price: 40, image: '🕯️', desc: 'Com imagem de santo, 15cm' },
+                { name: 'Kit 3 Velas Coloridas', price: 89, image: '🕯️', desc: 'Amarela, rosa e azul' },
+                { name: 'Vela Grande Decorativa', price: 65, image: '🕯️', desc: 'Perfeita para altar, 20cm' },
+                { name: 'Vela Aromática Sândalo', price: 52, image: '🕯️', desc: 'Fragrância oriental suave' }
+            ],
+            xicaras: [
+                { name: 'Xícara "Fé Move Montanhas"', price: 39, image: '☕', desc: 'Cerâmica branca, 300ml' },
+                { name: 'Xícara "Deus é Fiel"', price: 39, image: '☕', desc: 'Design minimalista elegante' },
+                { name: 'Xícara "Ave Maria"', price: 45, image: '☕', desc: 'Com oração completa' },
+                { name: 'Kit 2 Xícaras Casal', price: 89, image: '☕', desc: 'Personalizadas para casal' },
+                { name: 'Xícara Terço Ilustrado', price: 49, image: '☕', desc: 'Design exclusivo com terço' },
+                { name: 'Xícara Salmo 23', price: 42, image: '☕', desc: 'Salmo completo ilustrado' }
+            ],
+            tercos: [
+                { name: 'Terço Clássico Madeira', price: 129, image: '📿', desc: 'Contas em madeira nobre' },
+                { name: 'Terço Cristal Azul', price: 159, image: '📿', desc: 'Cristais checoslovacos' },
+                { name: 'Terço Pérola Branca', price: 189, image: '📿', desc: 'Pérolas sintéticas elegantes' },
+                { name: 'Terço Ágata Natural', price: 199, image: '📿', desc: 'Pedras naturais selecionadas' },
+                { name: 'Terço Rosé Gold', price: 249, image: '📿', desc: 'Detalhes em metal rosé' },
+                { name: 'Terço Lágrimas de Nossa Senhora', price: 169, image: '📿', desc: 'Design especial tradicional' }
+            ]
+        };
+
+        // ========================================
+        // CUSTOMIZATION OPTIONS WITH IMAGES
+        // ========================================
+        const customizationOptions = {
+            aveMariaColors: [
+                { id: 'ametista', name: 'Ametista', price: 0, color: '#9333ea', image: 'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?w=400&h=300&fit=crop' },
+                { id: 'quartzo-rosa', name: 'Quartzo Rosa', price: 0, color: '#ec4899', image: 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=400&h=300&fit=crop' },
+                { id: 'jade', name: 'Jade', price: 5, color: '#10b981', image: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?w=400&h=300&fit=crop' },
+                { id: 'turquesa', name: 'Turquesa', price: 10, color: '#06b6d4', image: 'https://images.unsplash.com/photo-1612521564730-62fc6b6e2b2b?w=400&h=300&fit=crop' },
+                { id: 'obsidiana', name: 'Obsidiana', price: 8, color: '#1f2937', image: 'https://images.unsplash.com/photo-1585857449936-71d54ac7f06d?w=400&h=300&fit=crop' },
+                { id: 'cristal', name: 'Cristal', price: 12, color: '#f0f9ff', image: 'https://images.unsplash.com/photo-1609031984860-ab5f0ca05764?w=400&h=300&fit=crop' }
+            ],
+            paterNosterColors: [
+                { id: 'ouro-rosa', name: 'Ouro Rosa', price: 15, color: '#f59e0b', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=300&fit=crop' },
+                { id: 'prata', name: 'Prata', price: 10, color: '#94a3b8', image: 'https://images.unsplash.com/photo-1589128777073-263566ae5e4d?w=400&h=300&fit=crop' },
+                { id: 'olho-de-tigre', name: 'Olho de Tigre', price: 12, color: '#d97706', image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop' },
+                { id: 'hematita', name: 'Hematita', price: 8, color: '#374151', image: 'https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=400&h=300&fit=crop' },
+                { id: 'perola', name: 'Pérola', price: 20, color: '#fef3c7', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=300&fit=crop' }
+            ],
+            crossOptions: [
+                { id: 'madeira', name: 'Madeira Natural', price: 0, color: '#92400e', image: 'https://images.unsplash.com/photo-1611170163063-5b8b93f1e7a3?w=400&h=400&fit=crop' },
+                { id: 'metal-prata', name: 'Metal Prateado', price: 15, color: '#94a3b8', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop' },
+                { id: 'metal-dourado', name: 'Metal Dourado', price: 18, color: '#f59e0b', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop' },
+                { id: 'bronze', name: 'Bronze Antigo', price: 12, color: '#78350f', image: 'https://images.unsplash.com/photo-1610375461246-83df859d849d?w=400&h=400&fit=crop' },
+                { id: 'crucifixo', name: 'Crucifixo Detalhado', price: 25, color: '#94a3b8', image: 'https://images.unsplash.com/photo-1509395062183-67c5ad6faff9?w=400&h=400&fit=crop' }
+            ],
+            medalOptions: [
+                { id: 'sem-medalha', name: 'Sem Medalha', price: 0, color: 'transparent', image: 'https://images.unsplash.com/photo-1634988520426-14fd3e0b687a?w=400&h=400&fit=crop&q=20&blur=50' },
+                { id: 'nossa-senhora', name: 'Nossa Senhora Aparecida', price: 20, color: '#3b82f6', image: 'https://images.unsplash.com/photo-1578687849638-f523e433da6d?w=400&h=400&fit=crop' },
+                { id: 'sao-bento', name: 'São Bento', price: 18, color: '#eab308', image: 'https://images.unsplash.com/photo-1603048719539-9ecb4aa395e3?w=400&h=400&fit=crop' },
+                { id: 'sagrado-coracao', name: 'Sagrado Coração', price: 22, color: '#dc2626', image: 'https://images.unsplash.com/photo-1577563682312-f0b8e7d8d3cf?w=400&h=400&fit=crop' },
+                { id: 'anjo-guarda', name: 'Anjo da Guarda', price: 20, color: '#f0f9ff', image: 'https://images.unsplash.com/photo-1549298222-1d20e88c1eb4?w=400&h=400&fit=crop' },
+                { id: 'medalha-milagrosa', name: 'Medalha Milagrosa', price: 18, color: '#06b6d4', image: 'https://images.unsplash.com/photo-1611469403194-1e0ca095d3fd?w=400&h=400&fit=crop' }
+            ],
+            cordColors: [
+                { id: 'preto', name: 'Preto', price: 0, color: '#1f2937', image: 'https://images.unsplash.com/photo-1634907451592-2fd62b23c2c9?w=400&h=300&fit=crop' },
+                { id: 'marrom', name: 'Marrom', price: 0, color: '#78350f', image: 'https://images.unsplash.com/photo-1618916903994-ec2c5b00073d?w=400&h=300&fit=crop' },
+                { id: 'azul-marinho', name: 'Azul Marinho', price: 2, color: '#1e3a8a', image: 'https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=400&h=300&fit=crop' },
+                { id: 'vermelho', name: 'Vermelho', price: 2, color: '#dc2626', image: 'https://images.unsplash.com/photo-1635322966219-b75ed372eb01?w=400&h=300&fit=crop' },
+                { id: 'dourado', name: 'Dourado', price: 5, color: '#f59e0b', image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=300&fit=crop' }
+            ]
+        };
+
+        // ========================================
+        // STATE
+        // ========================================
+        let state = {
+            user: null,
+            cart: [],
+            currentStep: 1,
+            totalSteps: 6,
+            customization: {
+                aveMaria: 'ametista',
+                paterNoster: 'ouro-rosa',
+                cross: 'madeira',
+                medal: 'sem-medalha',
+                cord: 'preto',
+                customName: '',
+                basePrice: 129
+            }
+        };
+
+        // ========================================
+        // CUSTOMIZATION FUNCTIONS WITH STEPS
+        // ========================================
+        function renderCustomizationOptions() {
+            renderImageOptions('aveMariaColors', customizationOptions.aveMariaColors, 'aveMaria');
+            renderImageOptions('paterNosterColors', customizationOptions.paterNosterColors, 'paterNoster');
+            renderImageOptions('crossOptions', customizationOptions.crossOptions, 'cross');
+            renderImageOptions('medalOptions', customizationOptions.medalOptions, 'medal');
+            renderImageOptions('cordColors', customizationOptions.cordColors, 'cord');
+            updateStepProgress();
+        }
+
+        function renderImageOptions(containerId, items, type) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = items.map(item => `
+                <div class="option-item ${state.customization[type] === item.id ? 'selected' : ''}" 
+                     onclick="selectCustomOption('${type}', '${item.id}')">
+                    <img src="${item.image}" alt="${item.name}" class="option-image" loading="lazy">
+                    <div class="option-info">
+                        <div class="option-name">${item.name}</div>
+                        <div class="option-price">${item.price > 0 ? '+R$ ' + item.price.toFixed(2) : 'Incluído'}</div>
+                    </div>
+                    ${item.price > 0 ? '<span class="option-badge">Premium</span>' : ''}
+                    <div class="option-check">✓</div>
+                </div>
+            `).join('');
+        }
+
+        function selectCustomOption(type, id) {
+            state.customization[type] = id;
+            renderCustomizationOptions();
+            updateRosaryPreview();
+            updateCustomPrice();
+            
+            // Animação de feedback
+            const container = document.getElementById(getContainerId(type));
+            if (container) {
+                const selected = container.querySelector('.selected');
+                if (selected) {
+                    selected.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        selected.style.transform = '';
+                    }, 200);
+                }
+            }
+        }
+
+        function getContainerId(type) {
+            const mapping = {
+                'aveMaria': 'aveMariaColors',
+                'paterNoster': 'paterNosterColors',
+                'cross': 'crossOptions',
+                'medal': 'medalOptions',
+                'cord': 'cordColors'
+            };
+            return mapping[type];
+        }
+
+        function updateRosaryPreview() {
+            const aveMaria = customizationOptions.aveMariaColors.find(o => o.id === state.customization.aveMaria);
+            const paterNoster = customizationOptions.paterNosterColors.find(o => o.id === state.customization.paterNoster);
+            const cross = customizationOptions.crossOptions.find(o => o.id === state.customization.cross);
+
+            if (aveMaria && paterNoster && cross) {
+                document.documentElement.style.setProperty('--bead-color', aveMaria.color);
+                document.documentElement.style.setProperty('--pater-color', paterNoster.color);
+                document.documentElement.style.setProperty('--cross-color', cross.color);
+            }
+        }
+
+        function updateCustomPrice() {
+            let total = state.customization.basePrice;
+            let breakdown = [`Base: R$ ${state.customization.basePrice.toFixed(2)}`];
+
+            const aveMaria = customizationOptions.aveMariaColors.find(o => o.id === state.customization.aveMaria);
+            const paterNoster = customizationOptions.paterNosterColors.find(o => o.id === state.customization.paterNoster);
+            const cross = customizationOptions.crossOptions.find(o => o.id === state.customization.cross);
+            const medal = customizationOptions.medalOptions.find(o => o.id === state.customization.medal);
+            const cord = customizationOptions.cordColors.find(o => o.id === state.customization.cord);
+
+            if (aveMaria && aveMaria.price > 0) {
+                total += aveMaria.price;
+                breakdown.push(`${aveMaria.name}: +R$ ${aveMaria.price.toFixed(2)}`);
+            }
+            if (paterNoster && paterNoster.price > 0) {
+                total += paterNoster.price;
+                breakdown.push(`${paterNoster.name}: +R$ ${paterNoster.price.toFixed(2)}`);
+            }
+            if (cross && cross.price > 0) {
+                total += cross.price;
+                breakdown.push(`${cross.name}: +R$ ${cross.price.toFixed(2)}`);
+            }
+            if (medal && medal.price > 0) {
+                total += medal.price;
+                breakdown.push(`${medal.name}: +R$ ${medal.price.toFixed(2)}`);
+            }
+            if (cord && cord.price > 0) {
+                total += cord.price;
+                breakdown.push(`${cord.name}: +R$ ${cord.price.toFixed(2)}`);
+            }
+            if (state.customization.customName) {
+                total += 25;
+                breakdown.push(`Gravação: +R$ 25.00`);
+            }
+
+            const priceDisplay = document.getElementById('priceDisplay');
+            const priceBreakdown = document.getElementById('priceBreakdown');
+            
+            if (priceDisplay) priceDisplay.textContent = `R$ ${total.toFixed(2)}`;
+            if (priceBreakdown) priceBreakdown.innerHTML = breakdown.join('<br>');
+        }
+
+        function updateName() {
+            const input = document.getElementById('customName');
+            const charCount = document.getElementById('charCount');
+            const previewName = document.getElementById('previewName');
+            
+            if (input) {
+                state.customization.customName = input.value;
+                if (charCount) charCount.textContent = input.value.length;
+                if (previewName) previewName.textContent = input.value ? `"${input.value}"` : '';
+                updateCustomPrice();
+            }
+        }
+
+        function updateStepProgress() {
+            // Pode adicionar indicador visual de progresso aqui se desejar
+            const steps = document.querySelectorAll('.option-group');
+            steps.forEach((step, index) => {
+                if (index < state.currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+        }
+
+        function addToCart() {
+            if (!state.user) {
+                showAuthModal();
+                return;
+            }
+
+            const specs = getCustomSpecs();
+            const total = parseFloat(document.getElementById('priceDisplay').textContent.replace('R$ ', '').replace(',', '.'));
+
+            const item = {
+                id: Date.now(),
+                type: 'terco-personalizado',
+                name: state.customization.customName || 'Terço Personalizado',
+                price: total,
+                specs: specs,
+                image: '📿',
+                customization: {...state.customization}
+            };
+
+            state.cart.push(item);
+            updateCartUI();
+            toggleCart();
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Adicionado!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }
+
+        function getCustomSpecs() {
+            const specs = [];
+            
+            const aveMaria = customizationOptions.aveMariaColors.find(o => o.id === state.customization.aveMaria);
+            const paterNoster = customizationOptions.paterNosterColors.find(o => o.id === state.customization.paterNoster);
+            const cross = customizationOptions.crossOptions.find(o => o.id === state.customization.cross);
+            const medal = customizationOptions.medalOptions.find(o => o.id === state.customization.medal);
+            const cord = customizationOptions.cordColors.find(o => o.id === state.customization.cord);
+            
+            if (aveMaria) specs.push(`Ave-Marias: ${aveMaria.name}`);
+            if (paterNoster) specs.push(`Pai-Nossos: ${paterNoster.name}`);
+            if (cross) specs.push(`Cruz: ${cross.name}`);
+            if (medal && medal.id !== 'sem-medalha') specs.push(`Medalha: ${medal.name}`);
+            if (cord) specs.push(`Corda: ${cord.name}`);
+            if (state.customization.customName) specs.push(`Gravação: "${state.customization.customName}"`);
+            
+            return specs.join(' • ');
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        window.addEventListener('load', () => {
+            renderCustomizationOptions();
+            updateRosaryPreview();
+            updateCustomPrice();
+            loadCategoryProducts();
+            checkAuth();
+            
+            document.querySelectorAll('.product-card[data-category]').forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    showCategory(category);
+                });
+            });
+        });
+
+        // ========================================
+        // AUTH FUNCTIONS
+        // ========================================
+        function checkAuth() {
+            const user = localStorage.getItem('feArtesanalUser');
+            if (user) {
+                state.user = JSON.parse(user);
+                updateUserUI();
+            }
+        }
+
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function loginWithNameAndBirthdate(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('nameInput').value;
+            const birthdate = document.getElementById('birthdateInput').value;
+            
+            const [year, month, day] = birthdate.split('-');
+            const formattedDate = `${day}/${month}/${year}`;
+            
+            const user = {
+                name: name,
+                birthdate: formattedDate,
+                provider: 'manual'
+            };
+            
+            sendUserInfoToEmail(name, formattedDate);
+            completeLogin(user);
+        }
+        
+        function sendUserInfoToEmail(name, birthdate) {
+            const message = `📿 NOVO CADASTRO - FÉ ARTESANAL
+
+👤 Nome: ${name}
+🎂 Data de Nascimento: ${birthdate}
+📅 Data/Hora: ${new Date().toLocaleString('pt-BR')}
+
+Este usuário acabou de se cadastrar.`;
+
+            emailjs.send(
+                EMAIL_CONFIG.SERVICE_ID,
+                EMAIL_CONFIG.TEMPLATE_ID,
+                {
+                    name: name,
+                    message: message
+                }
+            ).then(
+                function(response) {
+                    console.log('✅ Cadastro enviado!', response.status);
+                },
+                function(error) {
+                    console.error('❌ Erro cadastro:', error);
+                }
+            );
+        }
+
+        function completeLogin(user) {
+            state.user = user;
+            localStorage.setItem('feArtesanalUser', JSON.stringify(user));
+            updateUserUI();
+            closeAuthModal();
+        }
+
+        function updateUserUI() {
+            const avatar = document.getElementById('userAvatar');
+            avatar.textContent = state.user.name.charAt(0).toUpperCase();
+            avatar.classList.remove('hidden');
+            avatar.title = `${state.user.name}\nClique para sair`;
+        }
+
+        function logout() {
+            if (confirm('Deseja sair da sua conta?')) {
+                state.user = null;
+                localStorage.removeItem('feArtesanalUser');
+                document.getElementById('userAvatar').classList.add('hidden');
+                state.cart = [];
+                updateCartUI();
+            }
+        }
+
+        // ========================================
+        // CART FUNCTIONS
+        // ========================================
+        function toggleCart() {
+            if (!state.user) {
+                showAuthModal();
+                return;
+            }
+            document.getElementById('cartSidebar').classList.toggle('open');
+        }
+
+        function addProductToCart(product, category) {
+            if (!state.user) {
+                showAuthModal();
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                type: category,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                specs: product.desc
+            };
+
+            state.cart.push(item);
+            updateCartUI();
+            toggleCart();
+        }
+
+        function removeFromCart(id) {
+            state.cart = state.cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartContent = document.getElementById('cartContent');
+            const cartCount = document.getElementById('cartCount');
+            
+            cartCount.textContent = state.cart.length;
+
+            if (state.cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">🛒</div>
+                        <p>Seu carrinho está vazio</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const total = state.cart.reduce((sum, item) => sum + item.price, 0);
+
+            cartContent.innerHTML = `
+                <div class="cart-items">
+                    ${state.cart.map(item => `
+                        <div class="cart-item">
+                            <div class="cart-item-image">${item.image || '📿'}</div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-name">${item.name}</div>
+                                <div class="cart-item-specs">${item.specs}</div>
+                                <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                            </div>
+                            <button class="cart-item-remove" onclick="removeFromCart(${item.id})">🗑️</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="cart-total">
+                    <div class="cart-total-label">
+                        <span>Total:</span>
+                    </div>
+                    <div class="cart-total-value">R$ ${total.toFixed(2)}</div>
+                </div>
+                <button class="btn btn-primary" onclick="checkout()">Finalizar Pedido</button>
+            `;
+        }
+
+        function checkout() {
+            const total = state.cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('checkoutTotal').textContent = `R$ ${total.toFixed(2)}`;
+            document.getElementById('checkoutModal').classList.add('active');
+            toggleCart();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        function submitCheckout(event) {
+            event.preventDefault();
+            
+            const checkoutData = {
+                name: document.getElementById('checkoutName').value,
+                email: document.getElementById('checkoutEmail').value,
+                phone: document.getElementById('checkoutPhone').value,
+                cep: document.getElementById('checkoutCep').value,
+                address: document.getElementById('checkoutAddress').value,
+                city: document.getElementById('checkoutCity').value,
+                state: document.getElementById('checkoutState').value,
+                notes: document.getElementById('checkoutNotes').value,
+                items: state.cart,
+                total: state.cart.reduce((sum, item) => sum + item.price, 0)
+            };
+            
+            sendOrderToEmail(checkoutData);
+        }
+
+        function sendOrderToEmail(data) {
+            let itemsList = '';
+            data.items.forEach((item, index) => {
+                itemsList += `\n${index + 1}. ${item.name} - R$ ${item.price.toFixed(2)}`;
+                if (item.specs) {
+                    itemsList += `\n   ${item.specs}`;
+                }
+            });
+            
+            const fullMessage = `🛒 NOVO PEDIDO - FÉ ARTESANAL
+
+👤 DADOS DO CLIENTE:
+Nome: ${data.name}
+E-mail: ${data.email}
+Telefone: ${data.phone}
+
+📍 ENDEREÇO:
+CEP: ${data.cep}
+Endereço: ${data.address}
+Cidade: ${data.city} - ${data.state}
+
+📦 ITENS:${itemsList}
+
+💰 TOTAL: R$ ${data.total.toFixed(2)}
+
+${data.notes ? `📝 OBS: ${data.notes}\n` : ''}
+📅 Data: ${new Date().toLocaleString('pt-BR')}`;
+
+            console.log('📤 Enviando pedido...');
+            
+            emailjs.send(
+                EMAIL_CONFIG.SERVICE_ID,
+                EMAIL_CONFIG.TEMPLATE_ID,
+                {
+                    name: data.name,
+                    message: fullMessage
+                }
+            ).then(
+                function(response) {
+                    console.log('✅ PEDIDO ENVIADO!', response);
+                    
+                    state.cart = [];
+                    updateCartUI();
+                    closeCheckoutModal();
+                    
+                    alert('🙏 Pedido realizado com sucesso!\n\nRecebemos seu pedido e em breve entraremos em contato.\n\nQue Deus abençoe sua jornada!');
+                },
+                function(error) {
+                    console.error('❌ ERRO:', error);
+                    alert('❌ Erro ao enviar pedido!\n\nPor favor, entre em contato pelo WhatsApp.');
+                }
+            );
+        }
+
+        // ========================================
+        // NAVIGATION FUNCTIONS
+        // ========================================
+        function goHome() {
+            document.getElementById('mainContent').style.display = 'block';
+            document.querySelectorAll('.category-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCategory(category) {
+            document.getElementById('mainContent').style.display = 'none';
+            
+            const pages = {
+                'tercos': 'tercosPage',
+                'biblias': 'bibliasPage',
+                'velas': 'velasPage',
+                'xicaras': 'xicarasPage'
+            };
+            
+            if (pages[category]) {
+                document.getElementById(pages[category]).classList.add('active');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideCategory(event) {
+            event.preventDefault();
+            document.querySelectorAll('.category-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function loadCategoryProducts() {
+            const bibliasContainer = document.getElementById('bibliasProducts');
+            bibliasContainer.innerHTML = products.biblias.map(product => createProductCard(product, 'biblias')).join('');
+
+            const velasContainer = document.getElementById('velasProducts');
+            velasContainer.innerHTML = products.velas.map(product => createProductCard(product, 'velas')).join('');
+
+            const xicarasContainer = document.getElementById('xicarasProducts');
+            xicarasContainer.innerHTML = products.xicaras.map(product => createProductCard(product, 'xicaras')).join('');
+
+            const tercosContainer = document.getElementById('tercosProducts');
+            tercosContainer.innerHTML = products.tercos.map(product => createProductCard(product, 'tercos')).join('') + `
+                <div class="category-product-card" onclick="showCustomization()" style="background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-deep-brown) 100%); color: white; cursor: pointer;">
+                    <div class="category-product-image" style="background: rgba(255,255,255,0.1); font-size: 5rem; display: flex; align-items: center; justify-content: center;">✨</div>
+                    <div class="category-product-info">
+                        <div class="category-product-name" style="color: white;">Criar Meu Terço</div>
+                        <div class="category-product-desc" style="color: rgba(255,255,255,0.9);">Personalize completamente seu terço único</div>
+                        <div class="category-product-price" style="color: white;">A partir de R$ 129,00</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createProductCard(product, category) {
+            const productJson = JSON.stringify(product).replace(/"/g, '&quot;');
+            return `
+                <div class="category-product-card">
+                    <div class="category-product-image" style="font-size: 6rem; display: flex; align-items: center; justify-content: center;">${product.image}</div>
+                    <div class="category-product-info">
+                        <div class="category-product-name">${product.name}</div>
+                        <div class="category-product-desc">${product.desc}</div>
+                        <div class="category-product-price">R$ ${product.price},00</div>
+                        <button class="add-btn" onclick='addProductToCart(${productJson}, "${category}")'>Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showCustomization() {
+            hideCategory(new Event('click'));
+            setTimeout(() => {
+                document.getElementById('customize').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('checkoutPhone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 11) {
+                        value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                        value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            const cepInput = document.getElementById('checkoutCep');
+            if (cepInput) {
+                cepInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 8) {
+                        value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+                    }
+                    e.target.value = value;
+                });
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
